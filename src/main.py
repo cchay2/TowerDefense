@@ -77,11 +77,13 @@ class Tower:
 
 	def distanceTo(self, target):
 		## Assuming target is an object
-		a = (self.x-target.x)**2
-		b = (self.y-target.y)**2
+		a = (self.x-target.center[0])**2
+		b = (self.y-target.center[1])**2
 
 		return math.sqrt(a+b)
 
+class Base:
+	def __init__self(self):
 
 class Enemy:
 	def __init__(self, x, y):
@@ -94,12 +96,17 @@ class Enemy:
 		self.width = 50
 		self.height = 50
 
+		self.center = (self.x+self.width//2, self.y+self.height//2)
+
+	def move(self, target):
+		pass
+
 	def takeDamage(self, damage):
 		self.hp -= damage
 
 	def draw(self, surface):
 		pygame.draw.rect(surface, "red", pygame.Rect(self.x, self.y, self.width, self.height))
-
+		pygame.draw.circle(surface, "black", self.center, 5, 1)
 
 
 tower = Tower()
