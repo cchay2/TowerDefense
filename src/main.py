@@ -1,4 +1,4 @@
-import pygame, sys, math
+import pygame, sys, math, random
 from collections import deque
 
 pygame.init()
@@ -96,6 +96,7 @@ class Tower:
         self.height = 50
 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.draw_rect = pygame.Rect(self.x+5, self.y+5, self.width-10, self.height-10)
 
         self.shooting = False
         self.shoot_start = 0
@@ -104,7 +105,8 @@ class Tower:
         self.timer = 0
 
     def draw(self, surface):
-        pygame.draw.rect(surface, "green", self.rect)
+        pygame.draw.rect(surface, "green", self.draw_rect)
+
         pygame.draw.circle(surface, "green", (self.x + self.width // 2, self.y + self.height // 2), self.range * 10, 1)
 
     def shoot(self, target):
@@ -202,8 +204,9 @@ class Enemy:
 
         self.center = (self.x + self.width // 2, self.y + self.height // 2)
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.draw_rect = pygame.Rect(self.x+5, self.y+5, self.width-10, self.height-10)
 
-        self.speed = 2
+        self.speed = random.choice([2, 2, 2, 5, 5, 10])
         self.path = []
         self.grid = grid
         self.target = target
@@ -239,6 +242,7 @@ class Enemy:
 
         self.center = (self.x + self.width // 2, self.y + self.height // 2)
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.draw_rect = pygame.Rect(self.x+5, self.y+5, self.width-10, self.height-10)
 
     def takeDamage(self, damage):
         self.hp -= damage
@@ -254,7 +258,7 @@ class Enemy:
         """Draw the player and hp bar"""
         self.updateHitPointHpBar()
 
-        pygame.draw.rect(surface, "red", self.rect)
+        pygame.draw.rect(surface, "red", self.draw_rect)
         pygame.draw.rect(surface, "black", self.empty_hp_rect)
         pygame.draw.rect(surface, "green", self.current_hp_rect)
 
