@@ -1,4 +1,5 @@
 import pygame, sys, math
+from Projectile import Projectile
 
 class Tower:
     def __init__(self, x, y):
@@ -21,11 +22,13 @@ class Tower:
         self.shoot_end = 0
 
         self.timer = 0
+        self.projectiles = []
 
     def draw(self, surface):
         pygame.draw.rect(surface, "green", self.draw_rect)
-
         pygame.draw.circle(surface, "green", (self.x + self.width // 2, self.y + self.height // 2), self.range * 10, 1)
+        for projectile in self.projectiles:
+            projectile.draw(surface)
 
     def shoot(self, target):
         if self.timer <= self.shoot_end:
@@ -35,7 +38,7 @@ class Tower:
 
         if not self.shooting:
             print("BANG")
-            target.takeDamage(self.damage)
+            self.projectiles.append(Projectile(self.x + self.width // 2, self.y + self.height // 2, target, self))
             self.shoot_start = self.timer
             self.shoot_end = self.shoot_start + round(self.speed * 60)
 
@@ -50,5 +53,13 @@ class Tower:
     def distanceTo(self, target):
         a = (self.x - target.center[0]) ** 2
         b = (self.y - target.center[1]) ** 2
-
         return math.sqrt(a + b)
+
+    def update(self):
+        self.timer += 1
+        for projectile in self.projectiles[:]:
+            if projectile.update():
+                self.projectiles.remove(projectile)
+            elif projectile.rect.colliderect(projectile.target.rect):
+                projectile.target.takeDamage(self.damage)
+                self.projectiles.remove(projectile)

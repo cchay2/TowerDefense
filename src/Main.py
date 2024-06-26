@@ -58,6 +58,7 @@ while True:
         tower.draw(SCREEN)
         tower.timer = timer
         tower.sentry(game.enemy_list)
+        tower.update()
 
     enemy_base.spawnEnemy(game.enemy_list, timer, grid, player_base)
 
